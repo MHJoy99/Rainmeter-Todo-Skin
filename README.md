@@ -6,6 +6,10 @@ Keywords: Rainmeter todo skin, Google Tasks Rainmeter widget, desktop todo board
 
 # Rainmeter Todo Skin — Google Tasks Desktop Widget
 
+![Todo Board banner - Rainmeter todo skin with Google Tasks sync](img/banner.png)
+
+![Todo Board skin screenshot - desktop todo widget with Google Tasks all-day tasks](img/screenshot.png)
+
 ## TL;DR / What is this?
 
 Todo Board is a Windows Rainmeter skin that puts a todo board widget directly on your desktop and syncs it with Google Tasks. Click a todo that has no custom link and it is created as a real Google Task in your account via OAuth 2.0; give a todo a date and it becomes an all-day Google Task that shows up in the Calendar Tasks layer and at tasks.google.com. The skin is fully local-first — every todo lives in a local `tasks.json` file, so the board keeps working offline even without Google.
