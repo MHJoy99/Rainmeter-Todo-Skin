@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "meta": {
+    "last_arxiv_sync_date": "",
+    "status": "Ready"
+  },
+  "tasks": [
+    {
+      "id": "example-task-001",
+      "title": "Example task",
+      "target": "",
+      "note": "",
+      "labels": ["Work"],
+      "completed": false,
+      "source": "manual",
+      "created_at": "2026-01-01T00:00:00.0000000+06:00",
+      "completed_at": null,
+      "available_from": null,
+      "due_at": "2026-01-15T09:00:00.0000000+06:00"
+    }
+  ]
+}

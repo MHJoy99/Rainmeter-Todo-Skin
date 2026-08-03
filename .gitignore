@@ -1,0 +1,15 @@
+# Secrets — never commit
+@Resources/gtasks-client.json
+@Resources/gtasks.secret
+@Resources/caldav.secret
+*.secret
+
+# Personal/user data
+@Resources/tasks.json
+@Resources/Generated.inc
+@Resources/ui-scale.txt
+
+# OS junk
+Thumbs.db
+Desktop.ini
+*.tmp

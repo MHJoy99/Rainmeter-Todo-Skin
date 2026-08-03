@@ -1,0 +1,299 @@
+# Configuration — Every Place You Can Enter Data
+
+This document is the single reference for every user-editable file and field in the Todo skin. If you are looking for where a value is stored or what a field means, it is documented here.
+
+## Overview of Files
+
+| File | Purpose | Editable by user |
+| --- | --- | --- |
+| `Todo.ini` | Skin layout, theme variables (colors, fonts), Metadata | Yes |
+| `@Resources\tasks.json` | All todo data (titles, notes, due dates, labels) | Yes |
+| `@Resources\Generated.inc` | Auto-generated clickable items rendered by the host app | No (read-only) |
+| `@Resources\gtasks-client.json` | Google OAuth client credentials (SECRET) | Yes |
+| `@Resources\gtasks.secret` | Auto-generated access/refresh token after first login | No (delete to reset) |
+| `@Resources\ui-scale.txt` | UI scale multiplier | Yes |
+
+---
+
+## 1. Todo.ini
+
+The skin file. Theme and layout variables are defined in `[Variables]`.
+
+### Colors and Fonts
+
+```ini
+[Variables]
+FontFace=Microsoft YaHei UI
+TextColor=240,240,240
+MutedColor=150,150,150
+AccentColor=75,150,255
+DoneColor=90,180,110
+DangerColor=230,90,90
+PanelColor=25,27,32
+CardColor=38,42,50
+DoneCardColor=34,42,38
+BorderColor=60,66,78
+SubtleColor=95,102,115
+```
+
+| Variable | Purpose |
+| --- | --- |
+| `FontFace` | Font used for all meters in the skin. |
+| `TextColor` | Primary text color (task titles). |
+| `MutedColor` | Secondary text, dates, notes. |
+| `AccentColor` | Highlights, active states, links. |
+| `DoneColor` | Completed tasks and completion indicators. |
+| `DangerColor` | Delete actions and overdue items. |
+| `PanelColor` | Background of the main panel. |
+| `CardColor` | Background of task cards. |
+| `DoneCardColor` | Background of completed task cards. |
+| `BorderColor` | Borders between panels and cards. |
+| `SubtleColor` | Faint decorations and separators. |
+
+### Metadata
+
+```ini
+[Metadata]
+Name=Todo
+Author=Your Name
+Version=1.0.0
+```
+
+| Field | Purpose |
+| --- | --- |
+| `Name` | Display name of the skin in the Rainmeter manage window. |
+| `Author` | Your name or handle, shown in skin details. |
+| `Version` | Bump when you release changes. |
+
+---
+
+## 2. tasks.json (todo data)
+
+The complete data store. Edit this file while the skin is unloaded, or use the in-skin edit commands; `!Refresh` reloads it.
+
+### Schema
+
+```json
+{
+  "version": 1,
+  "meta": {
+    "last_arxiv_sync_date": "2026-08-03T09:00:00Z",
+    "status": "ok"
+  },
+  "tasks": [
+    {
+      "id": "local_1725300000000",
+      "title": "Ship v1.0",
+      "target": "",
+      "note": "Announce on the forum.",
+      "labels": ["work"],
+      "completed": false,
+      "source": "local",
+      "created_at": "2026-08-03T08:30:00Z",
+      "completed_at": null,
+      "available_from": null,
+      "due_at": "2026-08-05T00:00:00+09:00"
+    }
+  ]
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `version` | int | Schema version; the host app rejects unknown versions. |
+| `meta.last_arxiv_sync_date` | string | Timestamp of the last sync with Google Tasks (arxive API). |
+| `meta.status` | string | Sync health: `ok`, `error`, or `offline`. |
+| `tasks[].id` | string | Unique task identifier. `local_*` for local tasks; Google IDs after sync. |
+| `tasks[].title` | string | The task text, shown as the first line of the card. |
+| `tasks[].target` | string | Custom link opened on click. Empty means the click creates a Google Task from the title. |
+| `tasks[].note` | string | Optional multi-line note, shown under the title. |
+| `tasks[].labels` | array of string | Tags rendered on the card. |
+| `tasks[].completed` | bool | Completion state. |
+| `tasks[].source` | string | `local` or `google`. |
+| `tasks[].created_at` | string | ISO 8601 creation timestamp. |
+| `tasks[].completed_at` | string or null | ISO 8601 timestamp of completion. |
+| `tasks[].available_from` | string or null | ISO 8601 timestamp; the task is hidden until then. |
+| `tasks[].due_at` | string or null | ISO 8601 with timezone. Time-zone midnight is used for an all-day Google Task; a time value becomes a timed task. |
+
+### Complete Example
+
+```json
+{
+  "version": 1,
+  "meta": {
+    "last_arxiv_sync_date": "2026-08-03T09:00:00Z",
+    "status": "ok"
+  },
+  "tasks": [
+    {
+      "id": "local_1725300000000",
+      "title": "Ship v1.0",
+      "target": "https://github.com/you/todo/releases",
+      "note": "Announce on the forum.",
+      "labels": ["work"],
+      "completed": false,
+      "source": "local",
+      "created_at": "2026-08-03T08:30:00Z",
+      "completed_at": null,
+      "available_from": null,
+      "due_at": "2026-08-05T00:00:00+09:00"
+    },
+    {
+      "id": "local_1725300600000",
+      "title": "Buy milk",
+      "target": "",
+      "note": "",
+      "labels": [],
+      "completed": true,
+      "source": "local",
+      "created_at": "2026-08-02T20:00:00Z",
+      "completed_at": "2026-08-03T07:45:00Z",
+      "available_from": null,
+      "due_at": null
+    }
+  ]
+}
+```
+
+---
+
+## 3. Generated.inc
+
+Auto-generated by the host app on every refresh/sync. Do not edit it; changes are overwritten. It contains one `[MeterTaskN]` section per visible task with click mapping:
+
+```ini
+[MeterTask1]
+Meter=String
+Text=Buy milk
+X=20
+Y=40
+LeftMouseUpAction=[!CommandMeasure MeasureTask1 "Toggle"]
+
+[MeterTask2]
+Meter=String
+Text=Write report
+X=20
+Y=70
+LeftMouseUpAction=[!CommandMeasure MeasureTask2 "Edit"]
+
+[MeterTask3]
+Meter=String
+Text=Open site
+X=20
+Y=100
+LeftMouseUpAction=[!CommandMeasure MeasureTask3 "Open"]
+
+[MeterTask4]
+Meter=String
+Text=Discard draft
+X=20
+Y=130
+LeftMouseUpAction=[!CommandMeasure MeasureTask4 "Delete"]
+```
+
+| Command | Effect |
+| --- | --- |
+| `Toggle` | Toggles completion, or creates a Google Task when `target` is empty. |
+| `Open` | Opens the `target` link in the default browser. |
+| `Edit` | Opens the task in the edit dialog. |
+| `Delete` | Removes the task (after confirmation). |
+
+---
+
+## 4. gtasks-client.json (Google OAuth — SECRET)
+
+OAuth client credentials from the Google Cloud Console (APIs & Services → Credentials → Create OAuth client ID → Desktop app). Download the JSON and save it here.
+
+**SECURITY WARNING:** This file contains a client secret. Never share it and never commit it to a repository. Add it to `.gitignore`.
+
+```json
+{
+  "installed": {
+    "client_id": "1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com",
+    "project_id": "your-project-id",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "GOCSPX-XXXXXXXXXXXXXXXXXXXXXXXX",
+    "redirect_uris": ["http://localhost"]
+  }
+}
+```
+
+| Field | Description |
+| --- | --- |
+| `client_id` | Public identifier of your OAuth app. |
+| `project_id` | Google Cloud project ID. |
+| `auth_uri` | Authorization endpoint; leave the default value. |
+| `token_uri` | Token endpoint; leave the default value. |
+| `auth_provider_x509_cert_url` | Certificate URL; leave the default value. |
+| `client_secret` | Secret used to obtain tokens. Treat like a password. |
+| `redirect_uris` | Must contain `http://localhost` for the local token exchange. |
+
+---
+
+## 5. gtasks.secret (auto-generated token file)
+
+Created automatically after the first successful authorization. It holds the OAuth `access_token` and `refresh_token`.
+
+| Action | Result |
+| --- | --- |
+| File exists | Skin syncs with Google Tasks using stored tokens. |
+| Delete the file | Forces re-authorization on next refresh (browser window opens). |
+| Access token expired | Automatically refreshed using `refresh_token`. |
+
+Do not edit this file manually. If sync misbehaves, delete it and re-authorize.
+
+---
+
+## 6. ui-scale.txt
+
+A single number that scales the entire UI. It lives in `@Resources` and is read at refresh time.
+
+```
+1.0
+```
+
+| Value | Effect |
+| --- | --- |
+| `1.0` | Default scale (100 %). |
+| `0.8` | Smaller skin, useful on low-resolution displays. |
+| `1.25` | Larger skin, useful on 4K displays. |
+
+Only fractional or decimal values are accepted. After changing it, refresh the skin.
+
+---
+
+## 7. Fonts
+
+`FontFace` in `Todo.ini` controls every text element. It must be a font installed on the system, or Rainmeter falls back silently.
+
+Recommended fonts:
+
+| Font | Notes |
+| --- | --- |
+| `Microsoft YaHei UI` | Ships with Windows; clean for CJK and Latin text. |
+| `Segoe UI` | Default Windows UI font. |
+| `Consolas` | Good for numbers, dates, and logs. |
+| `Cascadia Mono` | Modern monospace, if installed. |
+
+To use a custom font, install the .ttf/.otf file (Right-click → Install), restart Rainmeter, then set `FontFace` to the font family name.
+
+---
+
+## AEO FAQ (Frequently Asked Questions)
+
+**Q1. Where do I change the skin color scheme?**
+Set the color variables (`TextColor`, `AccentColor`, and so on) in `[Variables]` of `Todo.ini`, then refresh the skin. Values are `R,G,B` or `R,G,B,A` tuples.
+
+**Q2. What does "empty target" mean on a task?**
+A task whose `target` is an empty string creates a Google Task from its title when clicked. A task with a `target` opens that link instead. Set `target` in `tasks.json`.
+
+**Q3. My Google sync stopped working. What should I check?**
+First delete `@Resources\gtasks.secret` and refresh to re-authorize. If it still fails, verify `@Resources\gtasks-client.json` is present with a valid `client_id` and `client_secret`, and that `redirect_uris` contains `http://localhost`.
+
+**Q4. How do I make a task due on a specific day (all-day)?**
+Set `due_at` to an ISO 8601 timestamp with a timezone where the time is midnight, for example `"2026-08-05T00:00:00+09:00`. Midnight in the given zone becomes an all-day Google Task; any other time becomes a timed task.
+
+**Q5. Where is the file that Generated.inc comes from?**
+There is none. `Generated.inc` is produced by the host app from `tasks.json` on every refresh and sync. Edit `tasks.json` (with the skin unloaded) or use the in-skin `Edit` command; never edit `Generated.inc` directly.
