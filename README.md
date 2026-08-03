@@ -63,6 +63,19 @@ Share your paper scoring results with other devices through a File Browser accou
 Designed for modern displays. The host application is fully process-DPI aware, automatically scaling the tile and settings dialogs so everything looks crisp and proportional, whether you are on a 100% or high-DPI monitor.
 ![DPI-Aware UI](img/feature-dpi.png)
 
+<p align="center">
+  <img src="img/mini-perf.png" width="48%">
+  <img src="img/mini-design.png" width="48%">
+</p>
+
+## Architecture & Workflow
+
+### DeepSeek AI Architecture
+![DeepSeek AI Architecture](img/big-arch.png)
+
+### Seamless OAuth Workflow
+![OAuth Workflow](img/big-flow.png)
+
 ## All Features
 
 | Feature | Description |
