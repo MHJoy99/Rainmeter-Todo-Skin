@@ -14,3 +14,5 @@ Thumbs.db
 Desktop.ini
 *.tmp
 TodoHost.exe.bak
+AI_STATUS.md
+@Resources/gcal_push.py
