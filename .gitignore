@@ -16,3 +16,7 @@ Desktop.ini
 TodoHost.exe.bak
 AI_STATUS.md
 @Resources/gcal_push.py
+
+# Build artifacts
+release-build/
+.release-cache/
