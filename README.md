@@ -45,7 +45,25 @@ Todo Board is a Windows Rainmeter skin that puts a todo board widget directly on
 - **Updated updater.** "Check for updates" (About tab) now checks the `MHJoy99/Rainmeter-Todo-Skin` GitHub releases for the newest version tag and downloads the `Todo-Skin-v<version>.zip` package, installing both the Todo and Calendar skins while preserving user data (`tasks.json`, `ui-scale.txt`, secrets).
 - **Assembly metadata.** The host executables carry product/company/version metadata ("Rainmeter Todo Skin" by MHJoy99, version 1.5.0.0), and the About tab shows the runtime version read from `app-version.txt`.
 
-## Features
+## Core Features
+
+**Local-First Task Management**  
+Everything happens on your desktop. Todos live in a local `tasks.json` file, so the board keeps working entirely offline. Add, edit, and toggle tasks instantly without waiting for a sync.
+![Local First Tasks](img/feature-local.png)
+
+**DeepSeek AI Paper Scoring**  
+Keep up with the latest research effortlessly. Todo Board pulls a daily arXiv feed and scores papers using DeepSeek AI, highlighting the most relevant research for you based on your custom prompts.
+![DeepSeek AI Papers](img/feature-ai.png)
+
+**Seamless Cross-Device Sync**  
+Share your paper scoring results with other devices through a File Browser account, keeping your research workflow synchronized everywhere.
+![File Server Sync](img/feature-sync.png)
+
+**DPI-Aware & Responsive UI**  
+Designed for modern displays. The host application is fully process-DPI aware, automatically scaling the tile and settings dialogs so everything looks crisp and proportional, whether you are on a 100% or high-DPI monitor.
+![DPI-Aware UI](img/feature-dpi.png)
+
+## All Features
 
 | Feature | Description |
 | --- | --- |
