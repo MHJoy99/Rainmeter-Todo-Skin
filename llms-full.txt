@@ -1,0 +1,79 @@
+# Rainmeter Todo Skin (Todo Board) - full description
+
+Website: https://mhjoy99.github.io/Rainmeter-Todo-Skin/
+Source: https://github.com/MHJoy99/Rainmeter-Todo-Skin
+Author: MHJoy99 (https://github.com/MHJoy99)
+License: MIT
+Latest version: 1.5.0
+Platform: Windows 10 and Windows 11, Rainmeter 4.5.26 or newer, .NET Framework 4.x runtime (ships with Windows)
+Not affiliated with Google or Rainmeter. Google, Google Tasks and Google Calendar are trademarks of Google LLC.
+
+## What it is
+
+Todo Board is a Windows Rainmeter skin that puts a todo board widget directly on your desktop. It is local-first: every todo lives in a local tasks.json file (@Resources\tasks.json), so the board keeps working offline. You can optionally connect it to Google Tasks. After a one-time sign-in (Settings, Google Tasks, Sign in with Google), clicking a todo that has no custom link creates a real Google Task in your account via OAuth 2.0. A todo with a date becomes an all-day Google Task that shows up in the Google Calendar Tasks layer and at tasks.google.com.
+
+## How the Google Tasks sync works
+
+- A small C# host app, TodoHost.exe, performs the OAuth 2.0 desktop flow, calls the Google Tasks API, scores papers and stores tokens. Rainmeter alone cannot handle HTTPS callbacks and encrypted token storage reliably.
+- Since v1.5.0 the host ships with a built-in OAuth client, so no Google Cloud project is needed. The browser consent page requests the scope https://www.googleapis.com/auth/tasks and redirects to the loopback address http://127.0.0.1:8392/. Advanced users can place their own gtasks-client.json (desktop or web OAuth client JSON) in @Resources; it takes precedence.
+- OAuth tokens are stored encrypted with Windows DPAPI (current user) in @Resources\gtasks.secret. Tokens refresh automatically and revoked grants are detected and cleaned up. Sign out on the Google Tasks tab removes the saved account.
+- Clicking a todo with no custom link creates a Google Task. If the todo has a date (YYYY-MM-DD) it is an all-day task with due date YYYY-MM-DDT00:00:00.000Z; without a date the task has no due date. Tasks without a date appear in Google Tasks but not on the Google Calendar grid.
+- Clicking a todo with a custom link opens the link and never sends anything to Google.
+- Ticking the checkbox marks the todo complete on the board only; it does not change an existing Google Task.
+- Sync is one-way: tasks are written to Google Tasks and not read back into the skin. Every click creates a new task (no deduplication), so click once.
+- This skin creates Google Tasks, not Google Calendar events.
+
+## Features
+
+- Local-first task list: add, edit, delete and toggle todos, offline.
+- Click-to-create Google Task; dated todos become all-day tasks.
+- One-click Google sign-in with built-in OAuth client; DPAPI-encrypted tokens.
+- Custom links preserved.
+- DPI-aware UI: process-DPI aware, auto-scaling tile and dialogs, UI scale auto or 50% to 200% (About tab).
+- Built-in updater: "Check for updates" (About tab) checks the MHJoy99/Rainmeter-Todo-Skin GitHub releases, downloads Todo-Skin-v<version>.zip and installs the Todo and Calendar skins while preserving tasks.json, ui-scale.txt and secrets.
+- All-English UI: "Todo settings" dialog with tabs Papers, Google Tasks, DeepSeek API, Filter & Score, File Sync, Translation, About; "New task" / "Edit task" editor; "All tasks" manager.
+- Optional extras: daily arXiv paper feed (1 to 20 papers per day, 1 to 90 days cache retention); optional DeepSeek (OpenAI-compatible) scoring of titles and abstracts, only called after a manual confirmed refresh; file server sync of scoring results through a File Browser account; optional Tencent Cloud (TMT) translation of paper titles, credentials DPAPI-encrypted; a companion Calendar skin (installed by the same package) that can sync with any CalDAV server.
+
+## Install
+
+1. Download the latest release (1.5.0) from https://github.com/MHJoy99/Rainmeter-Todo-Skin/releases
+2. Double-click Todo-Skin-v1.5.0.rmskin (installs the Todo and Calendar skins), or extract Todo-Skin-v1.5.0.zip and copy Skins\Todo (and Skins\Calendar) into your Rainmeter skins directory, e.g. Documents\Rainmeter\Skins.
+3. In Rainmeter choose Refresh All (or restart Rainmeter) and load the "Todo Board" skin. It runs fully offline with its local tasks.json.
+4. Optional: Settings, Google Tasks, Sign in with Google.
+
+Build TodoHost.exe from source (plain C#, no Visual Studio needed):
+
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /nologo /target:winexe /optimize+ /r:System.Web.Extensions.dll /r:System.Windows.Forms.dll /r:System.Drawing.dll /r:System.Security.dll /out:TodoHost.exe backend\Common.cs backend\Todo*.cs
+
+## Privacy
+
+All todo data lives in @Resources\tasks.json. Google OAuth tokens (gtasks.secret), translation credentials (translation.secret), file-sync credentials (paper-sync.secret) and CalDAV credentials (caldav.secret) are stored encrypted with Windows DPAPI under your user account. The updater only contacts GitHub's public API when you click "Check for updates"; network use is otherwise limited to the services you configure. This project website uses cookieless Cloudflare Web Analytics.
+
+## FAQ
+
+Q: Does Rainmeter Todo Skin create Google Calendar events?
+A: No. It creates real Google Tasks, not Google Calendar events. A todo with a date is created as an all-day task (due date YYYY-MM-DDT00:00:00.000Z), which then appears in the Google Calendar Tasks layer and at tasks.google.com. A todo without a date is created without a due date.
+
+Q: Do I need my own Google Cloud project?
+A: No. Since v1.5.0 the host app ships with a built-in OAuth 2.0 client, so one-click sign-in works out of the box: open Settings, then the Google Tasks tab, then Sign in with Google. Bringing your own client is optional: place a gtasks-client.json file in the skin's @Resources folder and it takes precedence over the built-in one.
+
+Q: What happens when I click a todo?
+A: If the todo has a custom link, the link opens in your browser and nothing is sent to Google. If it has no custom link, TodoHost.exe calls the Google Tasks API and creates a real Google Task: all-day if the todo has a date, with no due date otherwise.
+
+Q: Does it work offline or without a Google account?
+A: Yes. Todo Board is local-first: every todo lives in a local tasks.json file, and adding, editing, deleting and toggling todos all work offline. Google is only contacted when you click a todo that has no custom link. A Google account is only needed for that optional sync.
+
+Q: Is my Google sign-in token safe?
+A: Tokens are encrypted with Windows DPAPI under your Windows user account and stored locally in @Resources\gtasks.secret. They refresh automatically, and revoked grants are detected and cleaned up. Use Sign out on the Google Tasks tab to remove the saved account.
+
+Q: Does sync work both ways?
+A: No. Sync is one-way: tasks are written to Google Tasks but are not read back into the skin. Ticking a todo's checkbox marks it done on the board only; it does not change the Google Task. Each click on a todo creates a new Google Task and clicks are not deduplicated, so avoid clicking the same todo twice.
+
+Q: Why does the skin need a C# host app (TodoHost.exe)?
+A: TodoHost.exe performs the OAuth 2.0 desktop flow with its loopback redirect on port 8392, calls the Google Tasks API, scores papers and stores tokens encrypted. Rainmeter alone cannot handle HTTPS callbacks and encrypted token storage reliably. The source is in the repository's backend folder and builds with the csc compiler that ships with Windows.
+
+Q: Which Windows and Rainmeter versions are supported?
+A: Windows 10 and Windows 11 with Rainmeter 4.5.26 or newer. The included TodoHost.exe uses the .NET Framework 4.x runtime that ships with Windows. The latest version is 1.5.0 and the project is MIT licensed.
+
+Q: Which optional extras are included besides todos?
+A: A daily arXiv paper feed, optional DeepSeek scoring of titles and abstracts (only called after you confirm a manual refresh), file-server sync of scoring results through a File Browser account, optional Tencent Cloud title translation, and a companion Calendar skin that can sync with a CalDAV server. All of these are optional; the todo board works without them.

@@ -1,0 +1,24 @@
+# Rainmeter Todo Skin
+
+> Rainmeter Todo Skin ("Todo Board") is a free, open-source (MIT) Windows Rainmeter skin that puts a local-first todo board on your desktop. Todos live in a local tasks.json file and work offline. After a one-time Sign in with Google (OAuth 2.0, built-in client, no Google Cloud project needed), clicking a todo that has no custom link creates a real Google Task via the Google Tasks API; a dated todo becomes an all-day task. Latest version: 1.5.0. Requires Windows 10/11 and Rainmeter 4.5.26 or newer. Not affiliated with Google or Rainmeter.
+
+## Docs
+
+- [README](https://github.com/MHJoy99/Rainmeter-Todo-Skin#readme): features, installation, Google account setup, FAQ, building from source, privacy
+- [Usage guide](https://github.com/MHJoy99/Rainmeter-Todo-Skin/blob/main/docs/USAGE.md): what each click does, dates and all-day tasks, warnings
+- [Google Tasks setup (own OAuth client)](https://github.com/MHJoy99/Rainmeter-Todo-Skin/blob/main/docs/GOOGLE_TASKS_SETUP.md): optional, bring your own client
+- [Configuration](https://github.com/MHJoy99/Rainmeter-Todo-Skin/blob/main/docs/CONFIGURATION.md): every user-editable file and field
+- [Troubleshooting](https://github.com/MHJoy99/Rainmeter-Todo-Skin/blob/main/docs/TROUBLESHOOTING.md): common problems and fixes
+- [Changelog](https://github.com/MHJoy99/Rainmeter-Todo-Skin/blob/main/CHANGELOG.md): version history
+- [Full plain-text description for LLMs](https://mhjoy99.github.io/Rainmeter-Todo-Skin/llms-full.txt): everything above in one file
+
+## Get it
+
+- [Project website](https://mhjoy99.github.io/Rainmeter-Todo-Skin/)
+- [Releases (Todo-Skin-v1.5.0.rmskin and .zip)](https://github.com/MHJoy99/Rainmeter-Todo-Skin/releases)
+- [Source code on GitHub](https://github.com/MHJoy99/Rainmeter-Todo-Skin)
+- [Report an issue](https://github.com/MHJoy99/Rainmeter-Todo-Skin/issues)
+
+## Optional
+
+- [Author: MHJoy99](https://github.com/MHJoy99)
